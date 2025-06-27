@@ -5,6 +5,8 @@
 package com.ntqn.quizapp;
 
 import com.ntqn.pojo.Category;
+import com.ntqn.services.CategoryServices;
+import com.ntqn.utils.JdbcConnector;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,32 +28,15 @@ import javafx.scene.control.ComboBox;
  */
 public class QuestionsController implements Initializable {
     @FXML private ComboBox<Category> cbCates;
+    private static final CategoryServices cateServices = new CategoryServices();
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/quizdb", "root", "root");
-            
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("Select * from new_table");
-            
-           List<Category> cates = new ArrayList<>();
-            while(rs.next()){
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                
-                Category c = new Category(id,name); 
-                cates.add(c);
-                //System.out.printf("%d - %s\n", id, name);
-            }
-            conn.close();
-            
-            this.cbCates.setItems(FXCollections.observableList(cates));
-        } catch (ClassNotFoundException | SQLException ex) {
+            this.cbCates.setItems(FXCollections.observableList(cateServices.getCates()));
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }    
