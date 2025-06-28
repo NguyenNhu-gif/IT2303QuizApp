@@ -5,6 +5,7 @@
 package com.ntqn.services;
 
 import com.ntqn.pojo.Category;
+import com.ntqn.pojo.Level;
 import com.ntqn.utils.JdbcConnector;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,24 +16,24 @@ import java.util.List;
 
 /**
  *
- * @author Nhu Nguyen
+ * @author admin
  */
-public class CategoryServices {
-    public List<Category> getCates() throws SQLException{
+public class LevelServices {
+    public List<Level> getLevels() throws SQLException{
         Connection conn = JdbcConnector.getInstance().connect();
         Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM category");
+        ResultSet rs = stm.executeQuery("SELECT * FROM level");
             
-            List<Category> cates = new ArrayList<>();
+            List<Level> levels = new ArrayList<>();
             while(rs.next()){
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
+                String note = rs.getString("note");
                 
-                Category c = new Category(id,name); 
-                cates.add(c);
+                Level l = new Level(id, name, note);
+                levels.add(l);
         }
             
-            return cates;
+            return levels;
     }
-        
 }
